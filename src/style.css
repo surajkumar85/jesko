@@ -1,0 +1,294 @@
+/* Reset and Core Styling */
+:root {
+  --bg-primary: #07070a;
+  --bg-secondary: #0d0d12;
+  --accent-color: #ff5e36; /* Koenigsegg Orange */
+  --text-main: #f3f4f6;
+  --text-muted: #8b8d99;
+  --font-display: 'Orbitron', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  scrollbar-width: thin;
+  scrollbar-color: #333 #07070a;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  overflow-x: clip;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: #25262e;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}
+
+/* Luxury Loader Overlay (Editorial Black on White) */
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: #ffffff; /* Solid stark white backdrop */
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
+}
+
+.loader-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader-content {
+  width: 80%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.loader-brand {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  font-weight: 900;
+  letter-spacing: 0.8rem;
+  color: #000000; /* Stark black brand title */
+  margin-bottom: 2rem;
+  margin-right: -0.8rem;
+}
+
+.loader-status {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.15rem;
+  color: #71717a; /* Medium gray */
+  margin-bottom: 0.75rem;
+}
+
+.loader-pct {
+  color: #000000; /* Stark black percentage text */
+  font-weight: bold;
+}
+
+.loader-bar-bg {
+  width: 100%;
+  height: 2px;
+  background-color: #f4f4f5; /* Very soft light gray base */
+  border-radius: 0; /* Sharp minimal edges */
+  overflow: hidden;
+}
+
+.loader-bar-fill {
+  width: 0%;
+  height: 100%;
+  background-color: #000000; /* Stark black progress indicator */
+  transition: width 0.1s ease-out;
+}
+
+/* Main Container Layout */
+#app {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Hero Section: Scroll Track and Sticky viewport */
+#hero-scroll-track {
+  position: relative;
+  height: 600vh; /* Tracks scroll distance for 114 frames */
+  background-color: #000;
+}
+
+#hero-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#hero-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 1;
+}
+
+/* Scroll prompt mouse animation */
+.scroll-prompt {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+.scroll-prompt.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mouse-icon {
+  width: 24px;
+  height: 40px;
+  border: 2px solid var(--text-muted);
+  border-radius: 12px;
+  position: relative;
+  display: block;
+}
+
+.mouse-icon .wheel {
+  display: block;
+  width: 4px;
+  height: 8px;
+  background-color: var(--accent-color);
+  border-radius: 2px;
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: mouse-scroll 1.6s infinite ease-in-out;
+}
+
+/* Section 2: Centered Credits Section (Editorial Black on White Luxury) */
+#credits-section {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff; /* Solid stark white backdrop */
+  color: #000000; /* Solid high-contrast black typography */
+  overflow: hidden;
+  z-index: 2;
+  text-align: center;
+  padding: 0 24px;
+}
+
+.credits-category {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.5rem;
+  color: #71717a; /* Medium gray */
+  margin-bottom: 24px;
+  text-transform: uppercase;
+  margin-right: -0.5rem; /* Offsets trailing letter-spacing for true alignment */
+}
+
+.author-credits {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 10vw, 5.5rem);
+  font-weight: 900;
+  color: #000000;
+  letter-spacing: 1.5rem;
+  margin-bottom: 30px;
+  line-height: 1;
+  text-transform: uppercase;
+  margin-right: -1.5rem; /* Offsets trailing letter-spacing for true alignment */
+}
+
+.credits-divider {
+  width: 40px;
+  height: 1px;
+  background-color: #000000;
+  margin-bottom: 30px;
+}
+
+.credit-tagline {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 300;
+  letter-spacing: 0.3rem;
+  color: #71717a;
+  margin-bottom: 50px;
+  text-transform: uppercase;
+  margin-right: -0.3rem; /* Offsets trailing letter-spacing for true alignment */
+}
+
+.replay-button {
+  background-color: #000000;
+  border: 1px solid #000000;
+  color: #ffffff;
+  padding: 16px 48px;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.3rem;
+  margin-right: -0.3rem; /* Offsets trailing letter-spacing for true alignment */
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-transform: uppercase;
+}
+
+.replay-button:hover {
+  background-color: #ffffff;
+  color: #000000;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Animations */
+@keyframes mouse-scroll {
+  0% {
+    transform: translate(-50%, 0);
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  80% {
+    transform: translate(-50%, 14px);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .replay-button {
+    transition: none !important;
+  }
+  .mouse-icon .wheel {
+    animation: none !important;
+  }
+}

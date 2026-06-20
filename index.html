@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jesko — Absolute Performance</title>
+    <!-- Google Fonts: Orbitron for tech/racing feel, Inter for clean copy -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <!-- Luxury Loader Screen -->
+    <div id="loader" class="loader-overlay">
+      <div class="loader-content">
+        <h1 class="loader-brand">JESKO</h1>
+        <div class="loader-status">
+          <span class="loader-text">INITIALIZING SYSTEMS</span>
+          <span id="loader-percentage" class="loader-pct">0%</span>
+        </div>
+        <div class="loader-bar-bg">
+          <div id="loader-bar" class="loader-bar-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="app">
+      <!-- Section 1: Scroll-driven Video Frame Track -->
+      <div id="hero-scroll-track">
+        <div id="hero-sticky">
+          <!-- Frame Rendering Target -->
+          <canvas id="hero-canvas"></canvas>
+
+          <!-- Interactive scroll indicator (Mouse icon only, no text) -->
+          <div id="scroll-indicator" class="scroll-prompt">
+            <div class="mouse-icon">
+              <span class="wheel"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Centered Credits Section (Takes full viewport - Luxury Minimal White) -->
+      <section id="credits-section">
+        <span class="credits-category">DESIGN &amp; DEVELOPMENT</span>
+        <h2 class="author-credits">SURAJ</h2>
+        <span class="credits-divider"></span>
+        <p class="credit-tagline">CREATIVE PORTFOLIO</p>
+        <button id="replay-btn" class="replay-button">
+          REPLAY
+        </button>
+      </section>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
