@@ -30,6 +30,7 @@ const track = document.getElementById('hero-scroll-track') as HTMLDivElement;
 const canvas = document.getElementById('hero-canvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 const replayBtn = document.getElementById('replay-btn') as HTMLButtonElement;
+const aviationOverlay = document.getElementById('aviation-hero-overlay') as HTMLDivElement;
 
 /**
  * Fits image into canvas mimicking CSS "background-size: cover"
@@ -105,6 +106,35 @@ const updateScroll = () => {
       scrollIndicator.classList.remove('fade-out');
     }
   }
+
+  // Fade in / out aviation overlay at the transition boundary (around frame 74)
+  if (aviationOverlay) {
+    const transitionFrame = 74;
+    const fadeRange = 6; // start fading at frame 68, solid at 74, faded by 80
+
+    let opacity = 0;
+    if (currentFrameIndex >= transitionFrame - fadeRange && currentFrameIndex <= transitionFrame + fadeRange) {
+      if (currentFrameIndex < transitionFrame) {
+        opacity = (currentFrameIndex - (transitionFrame - fadeRange)) / fadeRange;
+      } else if (currentFrameIndex > transitionFrame) {
+        opacity = ((transitionFrame + fadeRange) - currentFrameIndex) / fadeRange;
+      } else {
+        opacity = 1;
+      }
+    } else {
+      opacity = 0;
+    }
+
+    opacity = Math.max(0, Math.min(1, opacity));
+    aviationOverlay.style.opacity = String(opacity);
+    if (opacity > 0.01) {
+      aviationOverlay.style.visibility = 'visible';
+      aviationOverlay.style.pointerEvents = 'auto';
+    } else {
+      aviationOverlay.style.visibility = 'hidden';
+      aviationOverlay.style.pointerEvents = 'none';
+    }
+  }
 };
 
 /**
@@ -142,6 +172,9 @@ const initExperience = () => {
 
   // Draw initial frame
   renderFrame(0);
+  
+  // Initialize scroll positions and overlay states
+  updateScroll();
 };
 
 // Trigger image preloading

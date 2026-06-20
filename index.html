@@ -1,58 +1,140 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Jesko — Absolute Performance</title>
-    <!-- Google Fonts: Orbitron for tech/racing feel, Inter for clean copy -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <!-- Luxury Loader Screen -->
-    <div id="loader" class="loader-overlay">
-      <div class="loader-content">
-        <h1 class="loader-brand">JESKO</h1>
-        <div class="loader-status">
-          <span class="loader-text">INITIALIZING SYSTEMS</span>
-          <span id="loader-percentage" class="loader-pct">0%</span>
-        </div>
-        <div class="loader-bar-bg">
-          <div id="loader-bar" class="loader-bar-fill"></div>
-        </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jesko — Absolute Performance</title>
+  <!-- Google Fonts: Orbitron for tech/racing feel, Inter for clean copy -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@500;700;900&family=Space+Grotesk:wght@400;500;700&family=Syne:wght@700;800&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+  <!-- Luxury Loader Screen -->
+  <div id="loader" class="loader-overlay">
+    <div class="loader-content">
+      <h1 class="loader-brand">JESKO</h1>
+      <div class="loader-status">
+        <span class="loader-text">INITIALIZING SYSTEMS</span>
+        <span id="loader-percentage" class="loader-pct">0%</span>
+      </div>
+      <div class="loader-bar-bg">
+        <div id="loader-bar" class="loader-bar-fill"></div>
       </div>
     </div>
+  </div>
 
-    <div id="app">
-      <!-- Section 1: Scroll-driven Video Frame Track -->
-      <div id="hero-scroll-track">
-        <div id="hero-sticky">
-          <!-- Frame Rendering Target -->
-          <canvas id="hero-canvas"></canvas>
+  <div id="app">
+    <!-- Section 1: Scroll-driven Video Frame Track -->
+    <div id="hero-scroll-track">
+      <div id="hero-sticky">
+        <!-- Frame Rendering Target -->
+        <canvas id="hero-canvas"></canvas>
 
-          <!-- Interactive scroll indicator (Mouse icon only, no text) -->
-          <div id="scroll-indicator" class="scroll-prompt">
-            <div class="mouse-icon">
-              <span class="wheel"></span>
+        <!-- Top Navbar (Fixed, outside overlay) -->
+        <nav class="aviation-nav">
+          <div class="nav-left">
+            <span class="nav-item">About</span>
+            <span class="nav-item">Our Fleet</span>
+            <span class="nav-item">Advantages</span>
+            <span class="nav-item">Global</span>
+          </div>
+          <div class="nav-right">
+            <span class="nav-item">+971 54 432 5050</span>
+            <span class="nav-item">info@jeskojets.com</span>
+          </div>
+        </nav>
+
+        <!-- Center Text (Fixed, outside overlay) -->
+        <div class="airplane-window-wrapper">
+          <h2 class="window-title">Jesko Jets</h2>
+        </div>
+
+        <!-- Aviation Hero Overlay -->
+        <div id="aviation-hero-overlay" class="aviation-overlay">
+          <!-- Left Hero Content -->
+          <div class="hero-left-content">
+            <h1 class="main-headline-left">We are<br>movement</h1>
+          </div>
+
+          <!-- Bottom Left Supporting Content -->
+          <div class="supporting-content-left">
+            <h3 class="supporting-title">Your<br>freedom to<br>enjoy life</h3>
+            <div class="supporting-divider"></div>
+            <p class="supporting-body">
+              Every flight is designed around your comfort,
+              time, and ambitions — so you can focus on
+              what truly matters, while we take care of
+              everything else.
+            </p>
+          </div>
+
+          <!-- Right Hero Content -->
+          <div class="hero-right-content">
+            <h1 class="main-headline-right">We are<br>distinction</h1>
+          </div>
+
+          <!-- Bottom Center CTA -->
+          <div class="bottom-center-cta">
+            <button class="cta-pill-button">Book the Flight</button>
+            <button class="cta-icon-button">
+              <!-- Airplane SVG Icon -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Bottom Right Scroll Indicator -->
+          <div class="bottom-right-indicator">
+            <div class="indicator-line"></div>
+            <div class="indicator-labels">
+              <span class="label-left">
+                <span class="chevron-stack">
+                  <svg class="chevron-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                  <svg class="chevron-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </span>
+                SCROLL DOWN
+              </span>
+              <span class="label-right">TO START THE JOURNEY</span>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Section 2: Centered Credits Section (Takes full viewport - Luxury Minimal White) -->
-      <section id="credits-section">
-        <span class="credits-category">DESIGN &amp; DEVELOPMENT</span>
-        <h2 class="author-credits">SURAJ</h2>
-        <span class="credits-divider"></span>
-        <p class="credit-tagline">CREATIVE PORTFOLIO</p>
-        <button id="replay-btn" class="replay-button">
-          REPLAY
-        </button>
-      </section>
+        <!-- Interactive scroll indicator (Mouse icon only, no text) -->
+        <div id="scroll-indicator" class="scroll-prompt">
+          <div class="mouse-icon">
+            <span class="wheel"></span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+    <!-- Section 2: Centered Credits Section (Takes full viewport - Luxury Minimal White) -->
+    <section id="credits-section">
+      <span class="credits-category">DESIGN &amp; DEVELOPMENT</span>
+      <h2 class="author-credits">SURAJ</h2>
+      <span class="credits-divider"></span>
+      <p class="credit-tagline">CREATIVE PORTFOLIO</p>
+      <button id="replay-btn" class="replay-button">
+        REPLAY
+      </button>
+    </section>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
 </html>
