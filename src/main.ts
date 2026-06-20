@@ -31,6 +31,7 @@ const canvas = document.getElementById('hero-canvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 const replayBtn = document.getElementById('replay-btn') as HTMLButtonElement;
 const aviationOverlay = document.getElementById('aviation-hero-overlay') as HTMLDivElement;
+const windowWrapper = document.querySelector('.airplane-window-wrapper') as HTMLDivElement;
 
 /**
  * Fits image into canvas mimicking CSS "background-size: cover"
@@ -109,15 +110,17 @@ const updateScroll = () => {
 
   // Fade in / out aviation overlay at the transition boundary (around frame 74)
   if (aviationOverlay) {
-    const transitionFrame = 74;
-    const fadeRange = 6; // start fading at frame 68, solid at 74, faded by 80
-
     let opacity = 0;
-    if (currentFrameIndex >= transitionFrame - fadeRange && currentFrameIndex <= transitionFrame + fadeRange) {
-      if (currentFrameIndex < transitionFrame) {
-        opacity = (currentFrameIndex - (transitionFrame - fadeRange)) / fadeRange;
-      } else if (currentFrameIndex > transitionFrame) {
-        opacity = ((transitionFrame + fadeRange) - currentFrameIndex) / fadeRange;
+    const fadeInStart = 65;
+    const fadeInEnd = 72;
+    const fadeOutStart = 84;
+    const fadeOutEnd = 91;
+
+    if (currentFrameIndex >= fadeInStart && currentFrameIndex <= fadeOutEnd) {
+      if (currentFrameIndex < fadeInEnd) {
+        opacity = (currentFrameIndex - fadeInStart) / (fadeInEnd - fadeInStart);
+      } else if (currentFrameIndex > fadeOutStart) {
+        opacity = (fadeOutEnd - currentFrameIndex) / (fadeOutEnd - fadeOutStart);
       } else {
         opacity = 1;
       }
@@ -135,6 +138,24 @@ const updateScroll = () => {
       aviationOverlay.style.pointerEvents = 'none';
     }
   }
+
+  // Animate the center title "Jesko Jets" to slide up and lock to the navbar after frame 91
+  if (windowWrapper) {
+    const startFrame = 91;
+    const endFrame = 106;
+    let p = 0;
+    if (currentFrameIndex >= startFrame) {
+      p = (currentFrameIndex - startFrame) / (endFrame - startFrame);
+      p = Math.max(0, Math.min(1, p));
+    }
+
+    const centerY = window.innerHeight / 2;
+    const targetY = 32 + 10; // 32px top navbar padding + vertical half-offset of text
+    const translateY = -p * (centerY - targetY);
+    const scale = 1 - p * 0.25; // scale down from 1.0 to 0.75
+
+    windowWrapper.style.transform = `translate(-50%, -50%) translateY(${translateY}px) scale(${scale})`;
+  }
 };
 
 /**
@@ -145,6 +166,7 @@ const handleResize = () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   renderFrame(currentFrameIndex);
+  updateScroll(); // Recalculate scrolling positions and wrapper transformations
 };
 
 /**
