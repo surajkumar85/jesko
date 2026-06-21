@@ -1,11 +1,12 @@
 import './style.css';
 
-// Total number of frame images: 74 (first scene) + 40 (second scene)
-const totalFrames = 114;
+// Total number of frame images in Hero and Luxury tracks
+const totalHeroFrames = 114;
 const firstSceneFrames = 74;
+const totalLuxuryFrames = 63; // 63 frames in public/third_scene (0 to 62)
 
-// Helper to resolve the relative path for each image
-const getFramePath = (index: number): string => {
+// Helper to resolve the relative path for each image in Hero track
+const getHeroFramePath = (index: number): string => {
   if (index < firstSceneFrames) {
     const paddedIndex = String(index).padStart(5, '0');
     return `/first_scene/frame_${paddedIndex}.jpg`;
@@ -16,19 +17,33 @@ const getFramePath = (index: number): string => {
   }
 };
 
+// Helper to resolve the relative path for each image in Luxury track
+const getLuxuryFramePath = (index: number): string => {
+  const paddedIndex = String(index).padStart(5, '0');
+  return `/third_scene/frame_${paddedIndex}.jpg`;
+};
+
 // State variables
-const images: HTMLImageElement[] = [];
+const heroImages: HTMLImageElement[] = [];
+const luxuryImages: HTMLImageElement[] = [];
 let loadedCount = 0;
-let currentFrameIndex = 0;
+let currentHeroFrameIndex = 0;
+let currentLuxuryFrameIndex = 0;
 let ticking = false;
 
 // DOM Elements
 const loader = document.getElementById('loader') as HTMLDivElement;
 const loaderPercentage = document.getElementById('loader-percentage') as HTMLSpanElement;
 const loaderBar = document.getElementById('loader-bar') as HTMLDivElement;
-const track = document.getElementById('hero-scroll-track') as HTMLDivElement;
-const canvas = document.getElementById('hero-canvas') as HTMLCanvasElement;
-const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+
+const heroTrack = document.getElementById('hero-scroll-track') as HTMLDivElement;
+const heroCanvas = document.getElementById('hero-canvas') as HTMLCanvasElement;
+const heroCtx = heroCanvas.getContext('2d') as CanvasRenderingContext2D;
+
+const luxuryTrack = document.getElementById('luxury-scroll-track') as HTMLDivElement;
+const luxuryCanvas = document.getElementById('luxury-canvas') as HTMLCanvasElement;
+const luxuryCtx = luxuryCanvas.getContext('2d') as CanvasRenderingContext2D;
+
 const replayBtn = document.getElementById('replay-btn') as HTMLButtonElement;
 const aviationOverlay = document.getElementById('aviation-hero-overlay') as HTMLDivElement;
 const windowWrapper = document.querySelector('.airplane-window-wrapper') as HTMLDivElement;
@@ -66,36 +81,41 @@ function drawImageCover(ctx: CanvasRenderingContext2D, img: HTMLImageElement) {
 }
 
 /**
- * Renders a specific frame by index
+ * Renders a specific frame by index on the Hero Canvas
  */
-const renderFrame = (index: number) => {
-  if (images[index] && images[index].complete) {
-    drawImageCover(ctx, images[index]);
+const renderHeroFrame = (index: number) => {
+  if (heroImages[index] && heroImages[index].complete) {
+    drawImageCover(heroCtx, heroImages[index]);
   }
 };
 
 /**
- * Main scroll logic
+ * Renders a specific frame by index on the Luxury Canvas
  */
-const updateScroll = () => {
-  if (!track || !canvas) return;
+const renderLuxuryFrame = (index: number) => {
+  if (luxuryImages[index] && luxuryImages[index].complete) {
+    drawImageCover(luxuryCtx, luxuryImages[index]);
+  }
+};
 
-  const rect = track.getBoundingClientRect();
+/**
+ * Hero track scroll logic
+ */
+const updateHeroScroll = () => {
+  if (!heroTrack || !heroCanvas) return;
+
+  const rect = heroTrack.getBoundingClientRect();
   const totalScrollable = rect.height - window.innerHeight;
-  
-  // Calculate vertical scroll offset within the scroll-track
   const scrolled = -rect.top;
   
-  // Normalize progress between 0 and 1
   let progress = scrolled / totalScrollable;
   progress = Math.max(0, Math.min(1, progress));
 
-  // Determine current frame index
-  const targetFrame = Math.min(totalFrames - 1, Math.floor(progress * totalFrames));
+  const targetFrame = Math.min(totalHeroFrames - 1, Math.floor(progress * totalHeroFrames));
   
-  if (targetFrame !== currentFrameIndex) {
-    currentFrameIndex = targetFrame;
-    renderFrame(currentFrameIndex);
+  if (targetFrame !== currentHeroFrameIndex) {
+    currentHeroFrameIndex = targetFrame;
+    renderHeroFrame(currentHeroFrameIndex);
   }
 
   // Fade out bottom scroll prompt icon after minimal scrolling
@@ -116,11 +136,11 @@ const updateScroll = () => {
     const fadeOutStart = 84;
     const fadeOutEnd = 91;
 
-    if (currentFrameIndex >= fadeInStart && currentFrameIndex <= fadeOutEnd) {
-      if (currentFrameIndex < fadeInEnd) {
-        opacity = (currentFrameIndex - fadeInStart) / (fadeInEnd - fadeInStart);
-      } else if (currentFrameIndex > fadeOutStart) {
-        opacity = (fadeOutEnd - currentFrameIndex) / (fadeOutEnd - fadeOutStart);
+    if (currentHeroFrameIndex >= fadeInStart && currentHeroFrameIndex <= fadeOutEnd) {
+      if (currentHeroFrameIndex < fadeInEnd) {
+        opacity = (currentHeroFrameIndex - fadeInStart) / (fadeInEnd - fadeInStart);
+      } else if (currentHeroFrameIndex > fadeOutStart) {
+        opacity = (fadeOutEnd - currentHeroFrameIndex) / (fadeOutEnd - fadeOutStart);
       } else {
         opacity = 1;
       }
@@ -144,8 +164,8 @@ const updateScroll = () => {
     const startFrame = 91;
     const endFrame = 106;
     let p = 0;
-    if (currentFrameIndex >= startFrame) {
-      p = (currentFrameIndex - startFrame) / (endFrame - startFrame);
+    if (currentHeroFrameIndex >= startFrame) {
+      p = (currentHeroFrameIndex - startFrame) / (endFrame - startFrame);
       p = Math.max(0, Math.min(1, p));
     }
 
@@ -159,14 +179,46 @@ const updateScroll = () => {
 };
 
 /**
+ * Luxury track scroll logic
+ */
+const updateLuxuryScroll = () => {
+  if (!luxuryTrack || !luxuryCanvas) return;
+
+  const rect = luxuryTrack.getBoundingClientRect();
+  
+  // Optimize execution: only compute/render if the section is on screen
+  if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+
+  const totalScrollable = rect.height - window.innerHeight;
+  const scrolled = -rect.top;
+  
+  let progress = scrolled / totalScrollable;
+  progress = Math.max(0, Math.min(1, progress));
+
+  const targetFrame = Math.min(totalLuxuryFrames - 1, Math.floor(progress * totalLuxuryFrames));
+  
+  if (targetFrame !== currentLuxuryFrameIndex) {
+    currentLuxuryFrameIndex = targetFrame;
+    renderLuxuryFrame(currentLuxuryFrameIndex);
+  }
+};
+
+/**
  * Adapts canvas dimensions and redraws
  */
 const handleResize = () => {
-  if (!canvas) return;
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  renderFrame(currentFrameIndex);
-  updateScroll(); // Recalculate scrolling positions and wrapper transformations
+  if (heroCanvas) {
+    heroCanvas.width = window.innerWidth;
+    heroCanvas.height = window.innerHeight;
+    renderHeroFrame(currentHeroFrameIndex);
+  }
+  if (luxuryCanvas) {
+    luxuryCanvas.width = window.innerWidth;
+    luxuryCanvas.height = window.innerHeight;
+    renderLuxuryFrame(currentLuxuryFrameIndex);
+  }
+  updateHeroScroll();
+  updateLuxuryScroll();
 };
 
 /**
@@ -185,50 +237,68 @@ const initExperience = () => {
   window.addEventListener('scroll', () => {
     if (!ticking) {
       window.requestAnimationFrame(() => {
-        updateScroll();
+        updateHeroScroll();
+        updateLuxuryScroll();
         ticking = false;
       });
       ticking = true;
     }
   }, { passive: true });
 
-  // Draw initial frame
-  renderFrame(0);
+  // Draw initial frames
+  renderHeroFrame(0);
+  renderLuxuryFrame(0);
   
-  // Initialize scroll positions and overlay states
-  updateScroll();
+  // Initialize scroll positions and states
+  updateHeroScroll();
+  updateLuxuryScroll();
 };
 
 // Trigger image preloading
 const startPreload = () => {
-  for (let i = 0; i < totalFrames; i++) {
-    const img = new Image();
-    img.src = getFramePath(i);
-    img.onload = () => {
-      loadedCount++;
-      const progressPercent = Math.floor((loadedCount / totalFrames) * 100);
-      
-      // Update UI loader
-      if (loaderPercentage) {
-        loaderPercentage.textContent = `${progressPercent}%`;
-      }
-      if (loaderBar) {
-        loaderBar.style.width = `${progressPercent}%`;
-      }
+  const totalToLoad = totalHeroFrames + totalLuxuryFrames;
+  
+  const checkAllLoaded = () => {
+    if (loadedCount === totalToLoad) {
+      setTimeout(initExperience, 500); // Tiny pause for fluid visual completion
+    }
+  };
 
-      if (loadedCount === totalFrames) {
-        // Complete preload and initialize app
-        setTimeout(initExperience, 500); // Tiny pause for fluid visual completion
-      }
-    };
-    img.onerror = () => {
-      // Fallback for errors so page doesn't hang
-      loadedCount++;
-      if (loadedCount === totalFrames) {
-        setTimeout(initExperience, 500);
-      }
-    };
-    images.push(img);
+  const handleImageLoad = () => {
+    loadedCount++;
+    const progressPercent = Math.floor((loadedCount / totalToLoad) * 100);
+    
+    // Update UI loader
+    if (loaderPercentage) {
+      loaderPercentage.textContent = `${progressPercent}%`;
+    }
+    if (loaderBar) {
+      loaderBar.style.width = `${progressPercent}%`;
+    }
+    checkAllLoaded();
+  };
+
+  const handleImageError = () => {
+    loadedCount++;
+    checkAllLoaded();
+  };
+
+  // Preload Hero frames
+  for (let i = 0; i < totalHeroFrames; i++) {
+    const img = new Image();
+    img.src = getHeroFramePath(i);
+    img.onload = handleImageLoad;
+    img.onerror = handleImageError;
+    heroImages.push(img);
+  }
+
+  // Preload Luxury frames
+  for (let i = 0; i < totalLuxuryFrames; i++) {
+    const img = new Image();
+    img.src = getLuxuryFramePath(i);
+    img.onload = handleImageLoad;
+    img.onerror = handleImageError;
+    luxuryImages.push(img);
   }
 };
 

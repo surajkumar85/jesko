@@ -144,6 +144,34 @@ body {
   z-index: 1;
 }
 
+/* Luxury Plane Section scroll-track and canvas */
+#luxury-scroll-track {
+  position: relative;
+  height: 350vh; /* Tracks scroll distance for 63 frames */
+  background-color: #000;
+}
+
+#luxury-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#luxury-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 1;
+}
+
 /* Scroll prompt mouse animation */
 .scroll-prompt {
   position: absolute;
